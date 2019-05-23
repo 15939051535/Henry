@@ -16,6 +16,8 @@ encode()是编码
 isinstance(s,unicode):判断s是否是unicode编码，如果是就返回true,否则返回false*
 
 '''
+#分支修改代码文件中内容，合并主线操作
+
 '''
 s='中文'
 s=s.decode('utf-8')   #将utf-8编码的解码成unicode
