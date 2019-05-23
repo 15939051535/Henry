@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>列表页</title>
+    <link rel="stylesheet" type="text/css" href="../htmls/common.css"/>
+    <script type="text/javascript" src="../htmls/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../htmls/common.js"></script>
+</head>
+<body>
+
+    <div id="div_result_big_show" class="div_result_big_show">
+
+        <img id="img_result_big_show" class="img_result_big_show" />
+
+    </div>
+
+
+    <div>
+
+
+        <table class="table_result_list">
+
+            <tr>
+                
+                <th>商品id</th>
+                <th>商品名称</th>
+                <th>upc</th>
+                <th>正面图片</th>
+                <th>侧面图片</th>
+                <th>反面图片</th>
+
+            </tr>
+
+            {% for d in data %}
+            <tr>
+
+                <td>{{d.good_id}}</td>
+                <td>{{d.good_name}}</td>
+                <td>{{d.good_upc}}</td>
+
+                {% if d.img_front_local and d.img_front_local != 'None' %}
+                    <td><a class="a_thum" href="{{ url_for('static', filename=d.img_front_local) }}" target="_blank"><img style="width: 50px; height: 50px;" src="{{ url_for('static', filename=d.img_front_local) }}"/></a></td>
+                {% else %}
+                    <td>暂无</td>
+                {% endif %}
+
+                {% if d.img_front_local and d.img_side_local != 'None' %}
+                    <td><a class="a_thum" href="{{ url_for('static', filename=d.img_side_local) }}" target="_blank"><img style="width: 50px; height: 50px;" src="{{ url_for('static', filename=d.img_side_local) }}"/></a></td>
+                {% else %}
+                    <td>暂无</td>
+                {% endif %}
+
+                {% if d.img_front_local and d.img_obverse_local != 'None' %}
+                    <td><a class="a_thum" href="{{ url_for('static', filename=d.img_obverse_local) }}" target="_blank"><img style="width: 50px; height: 50px;" src="{{ url_for('static', filename=d.img_obverse_local) }}"/></a></td>
+                {% else %}
+                    <td>暂无</td>
+                {% endif %}
+                
+            </tr>
+            {% endfor %}
+
+
+        </table>
+
+        
+
+    </div>
+
+</body>
+</html>

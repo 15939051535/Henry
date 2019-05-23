@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100%; height:100%; overflow: hidden;">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+
+        <title>查看结果</title>
+
+        <link rel="stylesheet" type="text/css" href="./htmls/common.css"/>
+        <script type="text/javascript" src="./htmls/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="./htmls/common.js"></script>
+       
+    </head>
+
+    <body id="result_body">
+
+        <div class="div_title" align="center">
+                <h1>结果展示</h1>
+                <p>正面（{{data.count_front}}/{{data.count}}）侧面（{{data.count_side}}/{{data.count}}）反面（{{data.count_obverse}}/{{data.count}}）</p>
+        </div>
+
+        <div class="div_result_check">
+            
+            <input type="checkbox" id="cb_result_front" value="0" checked="checked">正面</input>
+           
+            <input type="checkbox" id="cb_result_side" value="1" checked="checked">侧面</input>
+            
+            <input type="checkbox" id="cb_result_obverse" value="2" checked="checked">反面</input>
+
+        </div>
+
+        <div id="div_content" class="div_content">
+            <div id="div_content_menu" class="div_content_menu" align="center">
+            </div>
+            <div id="div_content_main" class="div_content_main">
+                <iframe id="result_source"></iframe>
+            </div>
+        </div>
+
+    </body>
+</html>

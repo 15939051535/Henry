@@ -1,0 +1,96 @@
+
+    <!DOCTYPE html>       
+    <html>  
+        <head>
+            <meta charset="utf-8"/>
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Cache-control" content="no-cache">
+            <meta http-equiv="Cache" content="no-cache">
+
+            <title></title>
+            
+            <link rel="stylesheet" type="text/css" href="../htmls/common.css"/>
+			<script type="text/javascript" src="../htmls/jquery-3.3.1.js"></script>
+			<script type="text/javascript" src="../htmls/common.js"></script>
+        </head>
+        <body>
+            <table border="1" cellspacing=”0″ cellpadding=”2″ bordercolor=”#009900″ style="width: 100%;">
+                <tr>
+                    <th style="width: 15%;">商品信息</th>
+                    <th style="width: 85%;">图片<th>
+                </tr>
+        {% for d in data %}
+				<tr>
+                    <td style="width: 15%; text-align: center;">
+                        <p>{{d.good_id}}</p>
+                        <p>{{d.good_name}}</p>
+                        <p>{{d.good_upc}}</p>
+                        <p>{{d.good_first}}</p>
+                        <p>{{d.good_second}}</p>
+                        <p>{{d.good_third}}</p>
+                        <p>{{d.good_desc}}</p>
+                        <p>{{d.good_price}}</p>
+                        <p style="display: none; ">{{d.good_p}}</p>
+                        <p style="display: none; ">{{d.good_c}}</p>
+                        <p style="display: none; ">{{d.good_x}}</p>
+                        {% if d.status == '111' %}
+                            <button class="btn_submit" style="width:120px; height: 40px;" disabled="disabled">已经提交</button>
+                        {% else %}
+                            <button class="btn_submit" style="width:120px; height: 40px;">提交</button>
+                        {% endif %}
+                    </td>
+
+                    <td style="width: 85%;">
+
+                        {% for img in d.good_imgs %}
+                            <div  align="center" style="width:200px;height:200px; float: left;position: relative;border: 1px solid #ddd;">
+                                <div class="col" style="width:100%; top:0;left:0; height:20px;">
+
+                                    {% if d.status.startswith('1') %}
+                                        {% if d.img_front == img %}
+                                        <input type="checkbox" class="img_state_front" value="0" checked="checked" disabled="disabled">正面</input>
+                                        {% else %}
+                                        <input type="checkbox" class="img_state_front" value="0" disabled="disabled">正面</input>
+                                        {% endif %}
+                                    {% else %}
+                                        <input type="checkbox" class="img_state_front" value="0">正面</input>
+                                    {% endif %}
+
+                                    {% if d.status[1] == '1' %}
+                                        {% if d.img_side == img %}
+                                        <input type="checkbox" class="img_state_side" value="1" checked="checked" disabled="disabled">侧面</input>
+                                        {% else %}
+                                        <input type="checkbox" class="img_state_side" value="1" disabled="disabled">侧面</input>
+                                        {% endif %}
+                                    {% else %}
+                                        <input type="checkbox" class="img_state_side" value="1">侧面</input>
+                                    {% endif %}
+
+                                    {% if d.status.endswith('1') %}
+                                        {% if d.img_obverse == img %}
+                                        <input type="checkbox" class="img_state_obverse" value="2" checked="checked" disabled="disabled">反面</input>
+                                        {% else %}
+                                        <input type="checkbox" class="img_state_obverse" value="2" disabled="disabled">反面</input>
+                                        {% endif %}
+                                    {% else %}
+                                        <input type="checkbox" class="img_state_obverse" value="2">反面</input>
+                                    {% endif %}
+                                        
+                                </div>
+
+                                <a href="{{img}}" target="_blank"><img style="width: 180px; height:180px;" src="{{img}}"/></a>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </td>
+                </tr>
+        {% endfor %}
+
+
+        
+            </table>
+        </body>
+    </html>  
+        

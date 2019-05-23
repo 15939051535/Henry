@@ -1,0 +1,41 @@
+
+    
+<!DOCTYPE html>
+<html  style="width:100%; height:100%; overflow: hidden;">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+
+        <title>导入Excel</title>
+        <link rel="shortcut icon" href="#" />
+        <link rel="stylesheet" type="text/css" href="./htmls/common.css"/>
+        <script type="text/javascript" src="./htmls/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="./htmls/common.js"></script>
+
+        <script type="text/javascript">
+
+            function upload_file(){
+
+                // alert($("#inp").src)
+
+                $.post("/uploadExl", {}, function(data){
+                    alert(data.returnMessage)
+                })
+
+            }
+
+        </script>
+
+    </head>
+    <body style="height: 100%; padding: 0; margin: 0;">
+        <div>
+
+            <input id="inp" type="file" value="添加"/>
+            <button id="btn" onclick="upload_file();">上传</button>
+        </div>
+    </body>
+</html>
+    
+    

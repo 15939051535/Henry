@@ -1,0 +1,36 @@
+2018-05-08 21:07:08  config.py[line:24] INFO 数据库初始化完成
+2018-05-08 21:07:09  _internal.py[line:88] INFO  * Running on http://0.0.0.0:9090/ (Press CTRL+C to quit)
+2018-05-08 21:07:11  config.py[line:24] INFO *************************收到访问请求: /*************************
+2018-05-08 21:07:11  config.py[line:24] INFO 数据总量：20557
+2018-05-08 21:07:11  config.py[line:24] INFO *************************请求处理完毕*************************
+2018-05-08 21:07:11  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:11] "GET / HTTP/1.1" 200 -
+2018-05-08 21:07:12  config.py[li
+ne:24] INFO *************************收到访问请求: /items/1*************************
+2018-05-08 21:07:12  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:12] "GET /items/1 HTTP/1.1" 200 -
+2018-05-08 21:07:13  config.py[line:24] INFO *************************接到请求: /uploadImg*************************
+2018-05-08 21:07:13  config.py[line:24] INFO upload_img:{'good_id': '0', 'good_name': '梦幻香皂125g', 'good_upc': '6901043810042', 'good_first': '美妆/洗护', 'good_second': '洗浴用品', 'good_third': '浴盐/香皂', 'good_desc': '梦幻', 'good_price': '0.0', 'good_p': '安徽省邮政公司', 'good_c': '池州市邮政公司', 'good_x': '石台县邮政公司', 'img_front': 'http://www.sijisong.com/images/201412/goods_img/174_G_1417888984236.jpg'}
+2018-05-08 21:07:13  config.py[line:24] INFO *************************结束请求*************************
+2018-05-08 21:07:13  config.py[line:24] INFO 
+
+2018-05-08 21:07:13  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:13] "POST /uploadImg HTTP/1.1" 200 -
+2018-05-08 21:07:13  config.py[line:24] INFO 在数据库中查到商品信息:good_name: 梦幻香皂125g, good_upc:6901043810042, status: 000
+2018-05-08 21:07:13  config.py[line:24] INFO 开始下载图片：upc:6901043810042, 图片类型：正面， 链接：http://www.sijisong.com/images/201412/goods_img/174_G_1417888984236.jpg
+2018-05-08 21:07:13  connectionpool.py[line:208] DEBUG Starting new HTTP connection (1): www.sijisong.com
+2018-05-08 21:07:14  connectionpool.py[line:396] DEBUG http://www.sijisong.com:80 "GET /images/201412/goods_img/174_G_1417888984236.jpg HTTP/1.1" 200 25696
+2018-05-08 21:07:14  config.py[line:24] INFO 图片下载成功：upc:6901043810042, 图片类型：正面， 链接：http://www.sijisong.com/images/201412/goods_img/174_G_1417888984236.jpg
+2018-05-08 21:07:14  config.py[line:24] INFO 待保存的商品信息：<webService.src.db.dbhelper.GoodItem object at 0x03BEADB0>
+2018-05-08 21:07:20  config.py[line:24] INFO *************************收到访问请求: /*************************
+2018-05-08 21:07:20  config.py[line:24] INFO 数据总量：20557
+2018-05-08 21:07:20  config.py[line:24] INFO *************************请求处理完毕*************************
+2018-05-08 21:07:20  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:20] "GET / HTTP/1.1" 200 -
+2018-05-08 21:07:21  config.py[line:24] INFO *************************收到访问请求: /items/1*************************
+2018-05-08 21:07:21  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:21] "GET /items/1 HTTP/1.1" 200 -
+2018-05-08 21:07:26  config.py[line:24] INFO *************************接到请求: /uploadImg*************************
+2018-05-08 21:07:26  config.py[line:24] INFO upload_img:{'good_id': '0', 'good_name': '梦幻香皂125g', 'good_upc': '6901043810042', 'good_first': '美妆/洗护', 'good_second': '洗浴用品', 'good_third': '浴盐/香皂', 'good_desc': '梦幻', 'good_price': '0.0', 'good_p': '安徽省邮政公司', 'good_c': '池州市邮政公司', 'good_x': '石台县邮政公司', 'img_front': 'http://www.sijisong.com/images/201412/goods_img/174_G_1417888984236.jpg'}
+2018-05-08 21:07:26  config.py[line:24] INFO *************************结束请求*************************
+2018-05-08 21:07:26  config.py[line:24] INFO 
+
+2018-05-08 21:07:26  _internal.py[line:88] INFO 127.0.0.1 - - [08/May/2018 21:07:26] "POST /uploadImg HTTP/1.1" 200 -
+2018-05-08 21:07:26  config.py[line:24] INFO 在数据库中查到商品信息:good_name: 梦幻香皂125g, good_upc:6901043810042, status: 000
+2018-05-08 21:07:26  config.py[line:24] INFO 已有正面图片: 6901043810042_100
+2018-05-08 21:07:26  config.py[line:24] INFO 待保存的商品信息：<webService.src.db.dbhelper.GoodItem object at 0x03C5D0B0>
