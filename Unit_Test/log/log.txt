@@ -1,0 +1,521 @@
+INFO:root:{"status":"OK", "name":"test_login1_1 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login1_2 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login3_1 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+}
+CRITICAL:root:Faild : test_login3_2 (checkstand_script.test_checkstand1.LoginTest) ==> {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': 456789}
+￥24.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login3_3 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥13.55元', u'str2': u'￥0.00元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥0.00元
+￥13.55元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login_1 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login_2 (checkstand_script.test_checkstand1.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': 123456}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login4_1 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥13.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥0.55元
+￥13.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login4_2 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥13.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': 123456}
+￥13.55元
+￥0.55元
+￥13.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login5_1 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥10.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥3.55元
+￥10.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login5_2 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥10.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': 123456}
+￥13.55元
+￥3.55元
+￥10.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_1 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥5.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥5.00元', u'vip': 123456, u'payM': 5}
+￥12.00元
+￥2.00元
+￥5.00元
+￥5.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_2 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥3.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 456789, u'payM': 3}
+￥13.55元
+￥3.55元
+￥3.00元
+￥7.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_3 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥20.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥10.00元', u'vip': 123456, u'payM': 20}
+￥12.00元
+￥2.00元
+￥20.00元
+￥10.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_4 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥12.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥2.00元', u'vip': u'', u'payM': 12}
+￥12.00元
+￥2.00元
+￥12.00元
+￥2.00元
+}
+INFO:root:{"status":"OK", "name":"test_login7_1 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥6.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 123456, u'payM': 6}
+￥13.55元
+￥0.55元
+￥6.00元
+￥7.00元
+}
+INFO:root:{"status":"OK", "name":"test_login7_2 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥0.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥13.00元', u'vip': 456789, u'payM': 0}
+￥13.55元
+￥0.55元
+￥0.00元
+￥13.00元
+}
+INFO:root:{"status":"OK", "name":"test_login7_3 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥20.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 123456, u'payM': 20}
+￥13.55元
+￥0.55元
+￥20.00元
+￥7.00元
+}
+INFO:root:{"status":"OK", "name":"test_login7_4 (checkstand_script.test_checkstand2.LoginTest)","content":{u'str3': u'￥200.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥187.00元', u'vip': u'', u'payM': 200}
+￥13.55元
+￥0.55元
+￥200.00元
+￥187.00元
+}
+INFO:root:{"status":"OK", "name":"test_login10_1 (checkstand_script.test_checkstand3.LoginTest)","content":{u'vip': 456789, u'barCode': 17, u'num1': u'结算<Enter>'}
+结算<Enter>
+}
+INFO:root:{"status":"OK", "name":"test_login10_2 (checkstand_script.test_checkstand3.LoginTest)","content":{u'vip': u'', u'barCode': 17, u'num1': u'结算<Enter>'}
+结算<Enter>
+}
+ERROR:root:Error : test_login11_1 (checkstand_script.test_checkstand3.LoginTest) ==> {u'vip': 789456, u'result': u'该会员处于冻结状态'}
+
+
+INFO:root:{"status":"OK", "name":"test_login12_1 (checkstand_script.test_checkstand3.LoginTest)","content":{u'vip': 456789, u'barCode': 59555, u'result': u'商品已下架'}
+商品已下架
+}
+INFO:root:{"status":"OK", "name":"test_login12_2 (checkstand_script.test_checkstand3.LoginTest)","content":{u'vip': u'', u'barCode': 8413, u'result': u'商品已下架'}
+商品已下架
+}
+INFO:root:{"status":"OK", "name":"test_login13_1 (checkstand_script.test_checkstand3.LoginTest)","content":{u'result1': u'快捷键<Ctrl+F5>'}
+快捷键<Ctrl+F5>
+}
+CRITICAL:root:Faild : test_login14_1 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥24.00元
+
+
+CRITICAL:root:Faild : test_login14_2 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456}
+￥24.00元
+
+
+CRITICAL:root:Faild : test_login14_3 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 123456, u'str4': u'￥0.00元', u'vip': 456789}
+￥24.00元
+
+
+CRITICAL:root:Faild : test_login14_4 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥14.55元', u'str2': u'￥0.00元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥25.55元
+
+
+CRITICAL:root:Faild : test_login15_1 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥14.00元', u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u'', u'unPackedSaleNum': 2}
+￥36.00元
+
+
+CRITICAL:root:Faild : test_login15_2 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥17.00元', u'str2': u'￥0.00元', u'str1': u'￥17.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456, u'unPackedSaleNum': 5}
+￥72.00元
+
+
+CRITICAL:root:Faild : test_login15_3 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥15.35元', u'str2': u'￥0.00元', u'str1': u'￥15.35元', u'barCode': 10, u'str4': u'￥0.00元', u'vip': 456789, u'unPackedSaleNum': 15}
+￥192.00元
+
+
+CRITICAL:root:Faild : test_login15_4 (checkstand_script.test_checkstand4.LoginTest) ==> {u'str3': u'￥113.55元', u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u'', u'unPackedSaleNum': 100}
+￥1213.55元
+
+
+INFO:root:{"status":"OK", "name":"test_login5_1 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 2, u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥14.00元', u'vip': u''}
+￥14.00元
+￥0.00元
+￥14.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login5_2 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+}
+CRITICAL:root:Faild : test_login5_3 (checkstand_script.test_checkstand4.LoginTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.35元', u'vip': 456789}
+￥13.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login5_4 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 100, u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.55元', u'vip': u''}
+￥113.55元
+￥0.00元
+￥113.55元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_1 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 2, u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥14.00元', u'vip': u''}
+￥14.00元
+￥0.00元
+￥14.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login6_2 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+}
+CRITICAL:root:Faild : test_login6_3 (checkstand_script.test_checkstand4.LoginTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.35元', u'vip': 456789}
+￥13.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login6_4 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 100, u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.55元', u'vip': u''}
+￥113.55元
+￥0.00元
+￥113.55元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login7_1 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+}
+CRITICAL:root:Faild : test_login7_2 (checkstand_script.test_checkstand4.LoginTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥0.35元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.00元', u'vip': 456789}
+￥13.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login7_3 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 100, u'str2': u'￥0.55元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.00元', u'vip': u''}
+￥113.55元
+￥0.55元
+￥113.00元
+￥0.00元
+}
+INFO:root:{"status":"OK", "name":"test_login8_1 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 11, u'str2': u'￥3.00元', u'str1': u'￥23.00元', u'barCode': 12, u'str4': u'￥9.00元', u'str3': u'￥11.00元', u'vip': 123456, u'payM': 11}
+￥23.00元
+￥3.00元
+￥11.00元
+￥9.00元
+}
+CRITICAL:root:Faild : test_login8_2 (checkstand_script.test_checkstand4.LoginTest) ==> {u'unPackedSaleCount': 22, u'str2': u'￥3.00元', u'str1': u'￥143.00元', u'barCode': 13, u'str4': u'￥10.00元', u'str3': u'￥150.00元', u'vip': u'', u'payM': 150}
+￥72.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login8_3 (checkstand_script.test_checkstand4.LoginTest)","content":{u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+}
+ERROR:root:Error : setUpClass (inbulk_script.test_inbulk1.InbulkTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+ERROR:root:Error : setUpClass (inbulk_script.test_inbulk2.InbulkTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+ERROR:root:Error : setUpClass (inbulk_script.test_inbulk3.InbulkTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+ERROR:root:Error : setUpClass (inbulk_script.test_inbulk4.InbulkTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+ERROR:root:Error : setUpClass (inbulk_script.test_inbulk5.InbulkTest) ==> {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+INFO:root:{"status":"OK", "name":"test_login01_1 (login_script.test_login1.LoginTest)","content":{u'username': u'', u'password': u'', u'result': u'用户名不能为空'}
+用户名不能为空
+}
+CRITICAL:root:Faild : test_login01_2 (login_script.test_login1.LoginTest) ==> {u'username': u'', u'password': u'1', u'result': u'用户名不aa能为空'}
+用户名不能为空
+
+
+INFO:root:{"status":"OK", "name":"test_login01_3 (login_script.test_login1.LoginTest)","content":{u'username': u'3', u'password': u'11111111111111111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_4 (login_script.test_login1.LoginTest)","content":{u'username': u'haha/.?', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_5 (login_script.test_login1.LoginTest)","content":{u'username': u'9999999902', u'password': u'999902', u'result': u'掌柜账号已冻结'}
+掌柜账号已冻结
+}
+ERROR:root:Error : test_login01_6 (login_script.test_login1.LoginTest) ==> {u'username': u'123qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+
+
+INFO:root:{"status":"OK", "name":"test_login01_7 (login_script.test_login1.LoginTest)","content":{u'username': u'1234qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_8 (login_script.test_login1.LoginTest)","content":{u'username': u'12345qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_9 (login_script.test_login1.LoginTest)","content":{u'username': u'1234qwer', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login02_1 (login_script.test_login1.LoginTest)","content":{u'username': u'haha/..', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login02_2 (login_script.test_login1.LoginTest)","content":{u'username': u'11111111111111111111', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login02_3 (login_script.test_login1.LoginTest)","content":{u'username': u'1', u'password': u'1', u'result': u'密码不能小于6位字符'}
+密码不能小于6位字符
+}
+ERROR:root:Error : test_login02_4 (login_script.test_login1.LoginTest) ==> {u'username': u'9999999986', u'password': u'11111111111111111111', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+
+
+INFO:root:{"status":"OK", "name":"test_login02_5 (login_script.test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'haha/.?', u'result': u'账号密码错误2次，超过6次账号将锁定'}
+账号密码错误2次，超过6次账号将锁定
+}
+ERROR:root:Error : test_login02_6 (login_script.test_login1.LoginTest) ==> {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误3次，超过6次账号将锁定'}
+
+
+ERROR:root:Error : test_login02_7 (login_script.test_login1.LoginTest) ==> {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误4次，超过6次账号将锁定'}
+
+
+ERROR:root:Error : test_login02_8 (login_script.test_login1.LoginTest) ==> {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误5次，超过6次账号将锁定'}
+
+
+INFO:root:{"status":"OK", "name":"test_login03_1 (login_script.test_login2.LoginTest)","content":{u'username': u'15939051535', u'password': u'123qwe', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+INFO:root:{"status":"OK", "name":"test_login03_2 (login_script.test_login2.LoginTest)","content":{u'username': u'123qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+INFO:root:{"status":"OK", "name":"test_login03_3 (login_script.test_login2.LoginTest)","content":{u'username': u'1234qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+INFO:root:{"status":"OK", "name":"test_login03_4 (login_script.test_login2.LoginTest)","content":{u'username': u'12345qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+ERROR:root:Error : test_login03_5 (login_script.test_login2.LoginTest) ==> {u'username': u'1234qwer', u'password': u'111111', u'result': u'邮掌柜首页'}
+
+
+INFO:root:{"status":"OK", "name":"test_login04_1 (login_script.test_login3.LoginTest)","content":{u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u''}
+手机号不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login04_2 (login_script.test_login3.LoginTest)","content":{u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u'haha/..?'}
+手机号不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login04_3 (login_script.test_login3.LoginTest)","content":{u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'1'}
+请输入正确的手机号
+}
+INFO:root:{"status":"OK", "name":"test_login04_4 (login_script.test_login3.LoginTest)","content":{u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+}
+ERROR:root:Error : test_login04_5 (login_script.test_login3.LoginTest) ==> {u'result': u'掌柜账号不存在', u'validatecode': u'111111', u'mobilenum': u'15939000000'}
+
+
+INFO:root:{"status":"OK", "name":"test_login05_1 (login_script.test_login3.LoginTest)","content":{u'result': u'验证码不能为空', u'validatecode': u'', u'mobilenum': u'15939000000'}
+验证码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login05_2 (login_script.test_login3.LoginTest)","content":{u'result': u'验证码必须为6位数字', u'validatecode': u'1', u'mobilenum': u'15939000000'}
+验证码必须为6位数字
+}
+ERROR:root:Error : test_login05_3 (login_script.test_login3.LoginTest) ==> {u'result': u'验证码错误1次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+
+
+ERROR:root:Error : test_login05_4 (login_script.test_login3.LoginTest) ==> 
+
+CRITICAL:root:Faild : test_login05_5 (login_script.test_login3.LoginTest) ==> {u'result': u'验证码错误3次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误1次，超过6次账号将锁定
+
+
+CRITICAL:root:Faild : test_login05_6 (login_script.test_login3.LoginTest) ==> {u'result': u'验证码错误4次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误2次，超过6次账号将锁定
+
+
+CRITICAL:root:Faild : test_login05_7 (login_script.test_login3.LoginTest) ==> {u'result': u'验证码错误5次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误3次，超过6次账号将锁定
+
+
+INFO:root:{"status":"OK", "name":"test_login06_1 (login_script.test_login3.LoginTest)","content":{u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u''}
+未输入手机号码, 无法获取验证码
+}
+INFO:root:{"status":"OK", "name":"test_login06_2 (login_script.test_login3.LoginTest)","content":{u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u'haha. /'}
+未输入手机号码, 无法获取验证码
+}
+INFO:root:{"status":"OK", "name":"test_login06_3 (login_script.test_login3.LoginTest)","content":{u'result': u'请输入正确的手机号', u'mobilenum': u'1'}
+请输入正确的手机号
+}
+INFO:root:{"status":"OK", "name":"test_login06_4 (login_script.test_login3.LoginTest)","content":{u'result': u'请输入正确的手机号', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+}
+INFO:root:{"status":"OK", "name":"test_login06_5 (login_script.test_login3.LoginTest)","content":{u'result': u'掌柜账号不存在', u'mobilenum': u'15939000000'}
+掌柜账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login07_1 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login07_2 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login07_3 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login07_4 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login08_1 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u''}
+验证码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login08_2 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'1'}
+验证码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login08_3 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11111'}
+验证码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login08_4 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11ha. ?'}
+验证码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login09_1 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'', u'phonenumber': u'15939000000', u'result': u'密码不能为空', u'messgescode': u'111111'}
+密码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login09_2 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'1', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+}
+INFO:root:{"status":"OK", "name":"test_login09_3 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'1111111111111111hah, .?', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+}
+INFO:root:{"status":"OK", "name":"test_login09_4 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'111111', u'phonenumber': u'15939000000', u'result': u'密码不能为单一数字的', u'messgescode': u'111111'}
+密码不能为单一数字的
+}
+INFO:root:{"status":"OK", "name":"test_login09_5 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'aaaaaa', u'phonenumber': u'15939000000', u'result': u'密码不能重复字母', u'messgescode': u'111111'}
+密码不能重复字母
+}
+INFO:root:{"status":"OK", "name":"test_login09_6 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'123456', u'phonenumber': u'15939000000', u'result': u'密码不能递增数字', u'messgescode': u'111111'}
+密码不能递增数字
+}
+INFO:root:{"status":"OK", "name":"test_login09_7 (login_script.test_login4.LoginTest)","content":{u'newpassword': u'654321', u'phonenumber': u'15939000000', u'result': u'密码不能递减数字', u'messgescode': u'111111'}
+密码不能递减数字
+}
+INFO:root:{"status":"OK", "name":"test_login10_1 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login10_2 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login10_3 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+INFO:root:{"status":"OK", "name":"test_login10_4 (login_script.test_login4.LoginTest)","content":{u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+}
+ERROR:root:Error : test_storage1_1 (storage_script.test_storage1.LoginTest) ==> {u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 0, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+
+
+INFO:root:{"status":"OK", "name":"test_storage1_10 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'请正确填写进货单价', u'purprice': u'gfdg', u'vipprice': 20, u'expirydate': u'', u'purnum': u'', u'itemcode': 451269132, u'saleprice': 22, u'marks': u'', u'standard': u'', u'itemname': u'dfdf'}
+请正确填写进货单价
+}
+CRITICAL:root:Faild : test_storage1_11 (storage_script.test_storage1.LoginTest) ==> {u'num1': u'请正确填写进货数量', u'purprice': 10, u'vipprice': 20, u'expirydate': u'', u'purnum': u'fdsf', u'itemcode': 451210632, u'saleprice': 22, u'marks': u'', u'standard': u'', u'itemname': u'fdfd'}
+商品名称为空
+
+
+INFO:root:{"status":"OK", "name":"test_storage1_12 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 60, u'vipprice': 70, u'expirydate': u'', u'purnum': 50, u'itemcode': 1845152, u'saleprice': 80, u'marks': u'', u'standard': u'', u'itemname': u'gggg'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_13 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 81413, u'saleprice': 60, u'marks': u'', u'standard': u'', u'itemname': u'hhhh'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_14 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 106484, u'saleprice': 60, u'marks': u'', u'standard': 999, u'itemname': u'hhhh'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_15 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 5422, u'saleprice': 60, u'marks': 888, u'standard': 999, u'itemname': u'hhhh'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_16 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 894562, u'saleprice': 60, u'marks': 888, u'standard': 999, u'itemname': u'3ggfg....'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_17 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 86121, u'saleprice': 60, u'marks': u'sdfjv895…', u'standard': u'dsjfnjds1254.', u'itemname': u'hhhh'}
+入库成功
+}
+INFO:root:{"status":"OK", "name":"test_storage1_2 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'商品名称为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 1754168, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品名称为空
+}
+CRITICAL:root:Faild : test_storage1_3 (storage_script.test_storage1.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 198453, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u'gggg'}
+商品名称为空
+
+
+CRITICAL:root:Faild : test_storage1_4 (storage_script.test_storage1.LoginTest) ==> {u'num1': u'请正确填写进货单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 189745, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+商品名称为空
+
+
+INFO:root:{"status":"OK", "name":"test_storage1_5 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'请正确填写进货单价', u'purprice': u'', u'vipprice': 90, u'expirydate': u'', u'purnum': u'', u'itemcode': 145619898, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+请正确填写进货单价
+}
+INFO:root:{"status":"OK", "name":"test_storage1_6 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'请正确填写进货数量', u'purprice': 80, u'vipprice': 90, u'expirydate': u'', u'purnum': u'', u'itemcode': 145619898, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+请正确填写进货数量
+}
+INFO:root:{"status":"OK", "name":"test_storage1_7 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': u'sadhas', u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品条码为空
+}
+INFO:root:{"status":"OK", "name":"test_storage1_8 (storage_script.test_storage1.LoginTest)","content":{u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': u'、。，-', u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品条码为空
+}
+CRITICAL:root:Faild : test_storage1_9 (storage_script.test_storage1.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+
+
+ERROR:root:Error : setUpClass (storage_script.test_storage2.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+
+
+ERROR:root:Error : setUpClass (storage_script.test_storage3.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+
+
+ERROR:root:Error : setUpClass (storage_script.test_storage4.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+
+
+ERROR:root:Error : setUpClass (storage_script.test_storage5.LoginTest) ==> {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+
+

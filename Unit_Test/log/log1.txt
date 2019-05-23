@@ -1,0 +1,64 @@
+INFO:root:{"status":"OK", "name":"test_login01_1 (test_login1.LoginTest)","content":{u'username': u'', u'password': u'', u'result': u'用户名不能为空'}
+用户名不能为空
+}
+CRITICAL:root:Faild : test_login01_2 (test_login1.LoginTest) ==> {u'username': u'', u'password': u'1', u'result': u'用户名不aa能为空'}
+用户名不能为空
+
+
+INFO:root:{"status":"OK", "name":"test_login01_3 (test_login1.LoginTest)","content":{u'username': u'3', u'password': u'11111111111111111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_4 (test_login1.LoginTest)","content":{u'username': u'9999999902', u'password': u'999902', u'result': u'掌柜账号已冻结'}
+掌柜账号已冻结
+}
+INFO:root:{"status":"OK", "name":"test_login01_5 (test_login1.LoginTest)","content":{u'username': u'haha/.?', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_6 (test_login1.LoginTest)","content":{u'username': u'123qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_7 (test_login1.LoginTest)","content":{u'username': u'1234qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_8 (test_login1.LoginTest)","content":{u'username': u'12345qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login01_9 (test_login1.LoginTest)","content":{u'username': u'1234qwer', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+}
+INFO:root:{"status":"OK", "name":"test_login02_1 (test_login1.LoginTest)","content":{u'username': u'haha/..', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login02_2 (test_login1.LoginTest)","content":{u'username': u'11111111111111111111', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+}
+INFO:root:{"status":"OK", "name":"test_login02_3 (test_login1.LoginTest)","content":{u'username': u'1', u'password': u'1', u'result': u'密码不能小于6位字符'}
+密码不能小于6位字符
+}
+INFO:root:{"status":"OK", "name":"test_login02_4 (test_login1.LoginTest)","content":{u'username': u'9999999985', u'password': u'haha/.?', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+账号密码错误1次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login02_5 (test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+账号密码错误1次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login02_6 (test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误2次，超过6次账号将锁定'}
+账号密码错误2次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login02_7 (test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误3次，超过6次账号将锁定'}
+账号密码错误3次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login02_8 (test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误4次，超过6次账号将锁定'}
+账号密码错误4次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login02_9 (test_login1.LoginTest)","content":{u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误5次，超过6次账号将锁定'}
+账号密码错误5次，超过6次账号将锁定
+}
+INFO:root:{"status":"OK", "name":"test_login03_1 (test_login2.LoginTest)","content":{u'username': u'15939051535', u'password': u'123qwe', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+INFO:root:{"status":"OK", "name":"test_login03_2 (test_login2.LoginTest)","content":{u'username': u'123qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}
+INFO:root:{"status":"OK", "name":"test_login03_3 (test_login2.LoginTest)","content":{u'username': u'1234qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+}

@@ -1,0 +1,4716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动化测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.3"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+    z-index: 100;
+	position:absolute;
+	left: 23%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:98%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{
+    position:absolute;  ;
+    top:20px;
+    left:300px;
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){
+    var color = ["#6c6","#c60","#c00"];
+    var data = [pass,fail,error];
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");
+    var ctx = canvas.getContext("2d");
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){
+        ctx.fillStyle = color[i];
+        ctx.beginPath();
+        ctx.moveTo(112,84);
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);
+        ctx.fill();
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));
+        ctx.fillStyle = color[i];
+        ctx.fillRect(posX, posY + 20 * i, width, height);
+        ctx.moveTo(posX, posY + 20 * i);
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];
+        ctx.fillText(percent, textX, textY + 20 * i);
+
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>自动化测试报告</h1>
+<p class='attribute'><strong>开始时间:</strong> 2018-04-24 16:44:17</p>
+<p class='attribute'><strong>耗时:</strong> 1:39:22.008000</p>
+<p class='attribute'><strong>状态:</strong> <span class="tj passCase">Pass</span>90 <span class="tj failCase">Failure</span>21 <span class="tj errorCase">Error</span>20</p>
+
+<p class='description'>用例执行情况</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+    <td>错误截图</td>
+</tr>
+
+<tr class='failClass'>
+    <td>checkstand_script.test_checkstand1.LoginTest</td>
+    <td>7</td>
+    <td>6</td>
+    <td>1</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',7)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login1_1: 不打印小票结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a></span>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login1_2: 不打印小票结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        通过</a></span>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login3_1: 挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a></span>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.4' class='none'>
+    <td ><div class='testcase'>test_login3_2: 挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.4')" >
+        失败</a></span>
+
+    <div id='div_ft1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.4: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': 456789}
+￥24.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand1.py", line 55, in test_login3
+    self.a.login3(dat3['vip'], dat3['barCode'], dat3[u'str1'], dat3[u'str2'], dat3[u'str3'], dat3[u'str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package1.py", line 393, in login3
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package1.py", line 321, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login3_3: 挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        通过</a></span>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: {u'str3': u'￥13.55元', u'str2': u'￥0.00元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥0.00元
+￥13.55元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login_1: 收银台会员结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a></span>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': u''}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login_2: 收银台会员结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        通过</a></span>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: {u'str3': u'￥12.00元', u'str2': u'￥0.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥0.00元', u'vip': 123456}
+￥12.00元
+￥0.00元
+￥12.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>checkstand_script.test_checkstand2.LoginTest</td>
+    <td>12</td>
+    <td>12</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c2',12)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login4_1: 免一元内零头结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        通过</a></span>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: {u'str3': u'￥13.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥0.55元
+￥13.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login4_2: 免一元内零头结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.2')" >
+        通过</a></span>
+
+    <div id='div_pt2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.2: {u'str3': u'￥13.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': 123456}
+￥13.55元
+￥0.55元
+￥13.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login5_1: 免十元内零头结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.3')" >
+        通过</a></span>
+
+    <div id='div_pt2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.3: {u'str3': u'￥10.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥13.55元
+￥3.55元
+￥10.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login5_2: 免十元内零头结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.4')" >
+        通过</a></span>
+
+    <div id='div_pt2.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.4: {u'str3': u'￥10.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': 123456}
+￥13.55元
+￥3.55元
+￥10.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_1: 十元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.5')" >
+        通过</a></span>
+
+    <div id='div_pt2.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.5: {u'str3': u'￥5.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥5.00元', u'vip': 123456, u'payM': 5}
+￥12.00元
+￥2.00元
+￥5.00元
+￥5.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_2: 十元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.6')" >
+        通过</a></span>
+
+    <div id='div_pt2.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.6: {u'str3': u'￥3.00元', u'str2': u'￥3.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 456789, u'payM': 3}
+￥13.55元
+￥3.55元
+￥3.00元
+￥7.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_3: 十元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.7')" >
+        通过</a></span>
+
+    <div id='div_pt2.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.7: {u'str3': u'￥20.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥10.00元', u'vip': 123456, u'payM': 20}
+￥12.00元
+￥2.00元
+￥20.00元
+￥10.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_4: 十元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.8')" >
+        通过</a></span>
+
+    <div id='div_pt2.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.8: {u'str3': u'￥12.00元', u'str2': u'￥2.00元', u'str1': u'￥12.00元', u'barCode': 12, u'str4': u'￥2.00元', u'vip': u'', u'payM': 12}
+￥12.00元
+￥2.00元
+￥12.00元
+￥2.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_1: 一元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.9')" >
+        通过</a></span>
+
+    <div id='div_pt2.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.9: {u'str3': u'￥6.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 123456, u'payM': 6}
+￥13.55元
+￥0.55元
+￥6.00元
+￥7.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_2: 一元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.10')" >
+        通过</a></span>
+
+    <div id='div_pt2.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.10: {u'str3': u'￥0.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥13.00元', u'vip': 456789, u'payM': 0}
+￥13.55元
+￥0.55元
+￥0.00元
+￥13.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_3: 一元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.11')" >
+        通过</a></span>
+
+    <div id='div_pt2.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.11: {u'str3': u'￥20.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥7.00元', u'vip': 123456, u'payM': 20}
+￥13.55元
+￥0.55元
+￥20.00元
+￥7.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_4: 一元内零头减免加赊账结算</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.12')" >
+        通过</a></span>
+
+    <div id='div_pt2.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.12: {u'str3': u'￥200.00元', u'str2': u'￥0.55元', u'str1': u'￥13.55元', u'barCode': 17, u'str4': u'￥187.00元', u'vip': u'', u'payM': 200}
+￥13.55元
+￥0.55元
+￥200.00元
+￥187.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>checkstand_script.test_checkstand3.LoginTest</td>
+    <td>6</td>
+    <td>5</td>
+    <td>0</td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c3',6)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt3.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_1: 验证积分兑换是否跳转</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.1')" >
+        通过</a></span>
+
+    <div id='div_pt3.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.1: {u'vip': 456789, u'barCode': 17, u'num1': u'结算&lt;Enter&gt;'}
+结算&lt;Enter&gt;
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_2: 验证积分兑换是否跳转</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.2')" >
+        通过</a></span>
+
+    <div id='div_pt3.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.2: {u'vip': u'', u'barCode': 17, u'num1': u'结算&lt;Enter&gt;'}
+结算&lt;Enter&gt;
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft3.3' class='none'>
+    <td ><div class='testcase'>test_login11_1: 验证冻结会员提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.3')" >
+        错误</a></span>
+
+    <div id='div_ft3.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.3: {u'vip': 789456, u'result': u'该会员处于冻结状态'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand3.py", line 60, in test_login11
+    self.a.login11(dat11['vip'], dat11[u'result'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 502, in login11
+    self.excpetc(result)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 448, in excpetc
+    num = driver.find_element_by_xpath('//*[@class="dialogBodyText dialogFlagWarn"]').text# 获取用户名输入框的提示文本
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 293, in find_element_by_xpath
+    return self.find_element(by=By.XPATH, value=xpath)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 752, in find_element
+    'value': value})['value']
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+NoSuchElementException: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//*[@class="dialogBodyText dialogFlagWarn"]"}
+  (Session info: content shell=)
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login12_1: 验证提示商品已下架</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.4')" >
+        通过</a></span>
+
+    <div id='div_pt3.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.4: {u'vip': 456789, u'barCode': 59555, u'result': u'商品已下架'}
+商品已下架
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login12_2: 验证提示商品已下架</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.5')" >
+        通过</a></span>
+
+    <div id='div_pt3.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.5: {u'vip': u'', u'barCode': 8413, u'result': u'商品已下架'}
+商品已下架
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login13_1: 验证快捷键跳转</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.6')" >
+        通过</a></span>
+
+    <div id='div_pt3.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.6: {u'result1': u'快捷键&lt;Ctrl+F5&gt;'}
+快捷键&lt;Ctrl+F5&gt;
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='failClass'>
+    <td>checkstand_script.test_checkstand4.LoginTest</td>
+    <td>22</td>
+    <td>10</td>
+    <td>12</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c4',22)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='ft4.1' class='none'>
+    <td ><div class='testcase'>test_login14_1: 选择热卖商品销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.1')" >
+        失败</a></span>
+
+    <div id='div_ft4.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.1: {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u''}
+￥24.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 51, in test_login14
+    self.a.login14(dat14['vip'], dat14['barCode'],  dat14['str1'], dat14['str2'], dat14['str3'], dat14['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 538, in login14
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.2' class='none'>
+    <td ><div class='testcase'>test_login14_2: 选择热卖商品销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.2')" >
+        失败</a></span>
+
+    <div id='div_ft4.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.2: {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456}
+￥24.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 51, in test_login14
+    self.a.login14(dat14['vip'], dat14['barCode'],  dat14['str1'], dat14['str2'], dat14['str3'], dat14['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 538, in login14
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.3' class='none'>
+    <td ><div class='testcase'>test_login14_3: 选择热卖商品销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.3')" >
+        失败</a></span>
+
+    <div id='div_ft4.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.3: {u'str3': u'￥13.00元', u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 123456, u'str4': u'￥0.00元', u'vip': 456789}
+￥24.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 51, in test_login14
+    self.a.login14(dat14['vip'], dat14['barCode'],  dat14['str1'], dat14['str2'], dat14['str3'], dat14['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 538, in login14
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.4' class='none'>
+    <td ><div class='testcase'>test_login14_4: 选择热卖商品销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.4')" >
+        失败</a></span>
+
+    <div id='div_ft4.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.4: {u'str3': u'￥14.55元', u'str2': u'￥0.00元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u''}
+￥25.55元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 51, in test_login14
+    self.a.login14(dat14['vip'], dat14['barCode'],  dat14['str1'], dat14['str2'], dat14['str3'], dat14['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 538, in login14
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.5' class='none'>
+    <td ><div class='testcase'>test_login15_1: 修改热卖商品销售数量</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.5')" >
+        失败</a></span>
+
+    <div id='div_ft4.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.5: {u'str3': u'￥14.00元', u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': u'', u'unPackedSaleNum': 2}
+￥36.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 58, in test_login15
+    dat15['str3'], dat15['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 561, in login15
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.6' class='none'>
+    <td ><div class='testcase'>test_login15_2: 修改热卖商品销售数量</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.6')" >
+        失败</a></span>
+
+    <div id='div_ft4.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.6: {u'str3': u'￥17.00元', u'str2': u'￥0.00元', u'str1': u'￥17.00元', u'barCode': 98, u'str4': u'￥0.00元', u'vip': 123456, u'unPackedSaleNum': 5}
+￥72.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 58, in test_login15
+    dat15['str3'], dat15['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 561, in login15
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.7' class='none'>
+    <td ><div class='testcase'>test_login15_3: 修改热卖商品销售数量</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.7')" >
+        失败</a></span>
+
+    <div id='div_ft4.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.7: {u'str3': u'￥15.35元', u'str2': u'￥0.00元', u'str1': u'￥15.35元', u'barCode': 10, u'str4': u'￥0.00元', u'vip': 456789, u'unPackedSaleNum': 15}
+￥192.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 58, in test_login15
+    dat15['str3'], dat15['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 561, in login15
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.8' class='none'>
+    <td ><div class='testcase'>test_login15_4: 修改热卖商品销售数量</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.8')" >
+        失败</a></span>
+
+    <div id='div_ft4.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.8: {u'str3': u'￥113.55元', u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'vip': u'', u'unPackedSaleNum': 100}
+￥1213.55元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 58, in test_login15
+    dat15['str3'], dat15['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 561, in login15
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login5_1: 修改热卖商品销售金额</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.9')" >
+        通过</a></span>
+
+    <div id='div_pt4.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.9: {u'unPackedSaleCount': 2, u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥14.00元', u'vip': u''}
+￥14.00元
+￥0.00元
+￥14.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login5_2: 修改热卖商品销售金额</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.10')" >
+        通过</a></span>
+
+    <div id='div_pt4.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.10: {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.11' class='none'>
+    <td ><div class='testcase'>test_login5_3: 修改热卖商品销售金额</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.11')" >
+        失败</a></span>
+
+    <div id='div_ft4.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.11: {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.35元', u'vip': 456789}
+￥13.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 65, in test_login5
+    dat16['str2'], dat16['str3'], dat16['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 584, in login16
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login5_4: 修改热卖商品销售金额</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.12')" >
+        通过</a></span>
+
+    <div id='div_pt4.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.12: {u'unPackedSaleCount': 100, u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.55元', u'vip': u''}
+￥113.55元
+￥0.00元
+￥113.55元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_1: 修改热卖商品销售金额挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.13')" >
+        通过</a></span>
+
+    <div id='div_pt4.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.13: {u'unPackedSaleCount': 2, u'str2': u'￥0.00元', u'str1': u'￥14.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥14.00元', u'vip': u''}
+￥14.00元
+￥0.00元
+￥14.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_2: 修改热卖商品销售金额挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.14')" >
+        通过</a></span>
+
+    <div id='div_pt4.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.14: {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.15' class='none'>
+    <td ><div class='testcase'>test_login6_3: 修改热卖商品销售金额挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.15')" >
+        失败</a></span>
+
+    <div id='div_ft4.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.15: {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.35元', u'vip': 456789}
+￥13.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 72, in test_login6
+    dat16['str2'], dat16['str3'], dat16['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 611, in login17
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login6_4: 修改热卖商品销售金额挂单取单销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.16')" >
+        通过</a></span>
+
+    <div id='div_pt4.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.16: {u'unPackedSaleCount': 100, u'str2': u'￥0.00元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.55元', u'vip': u''}
+￥113.55元
+￥0.00元
+￥113.55元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_1: 修改热卖商品销售金额挂单取单销售免一元销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.17')" >
+        通过</a></span>
+
+    <div id='div_pt4.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.17: {u'unPackedSaleCount': 1, u'str2': u'￥0.00元', u'str1': u'￥13.00元', u'barCode': 98, u'str4': u'￥0.00元', u'str3': u'￥13.00元', u'vip': 123456}
+￥13.00元
+￥0.00元
+￥13.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.18' class='none'>
+    <td ><div class='testcase'>test_login7_2: 修改热卖商品销售金额挂单取单销售免一元销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.18')" >
+        失败</a></span>
+
+    <div id='div_ft4.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.18: {u'unPackedSaleCount': 1, u'str2': u'￥0.35元', u'str1': u'￥1.35元', u'barCode': 10, u'str4': u'￥0.00元', u'str3': u'￥1.00元', u'vip': 456789}
+￥13.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 79, in test_login7
+    dat17['str2'], dat17['str3'], dat17['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 640, in login18
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_login7_3: 修改热卖商品销售金额挂单取单销售免一元销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.19')" >
+        通过</a></span>
+
+    <div id='div_pt4.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.19: {u'unPackedSaleCount': 100, u'str2': u'￥0.55元', u'str1': u'￥113.55元', u'barCode': 17, u'str4': u'￥0.00元', u'str3': u'￥113.00元', u'vip': u''}
+￥113.55元
+￥0.55元
+￥113.00元
+￥0.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.20' class='hiddenRow'>
+    <td ><div class='testcase'>test_login8_1: 修改热卖商品销售金额挂单取单销售免十元内元加修改实际金额销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.20')" >
+        通过</a></span>
+
+    <div id='div_pt4.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.20: {u'unPackedSaleCount': 11, u'str2': u'￥3.00元', u'str1': u'￥23.00元', u'barCode': 12, u'str4': u'￥9.00元', u'str3': u'￥11.00元', u'vip': 123456, u'payM': 11}
+￥23.00元
+￥3.00元
+￥11.00元
+￥9.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft4.21' class='none'>
+    <td ><div class='testcase'>test_login8_2: 修改热卖商品销售金额挂单取单销售免十元内元加修改实际金额销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft4.21')" >
+        失败</a></span>
+
+    <div id='div_ft4.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft4.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft4.21: {u'unPackedSaleCount': 22, u'str2': u'￥3.00元', u'str1': u'￥143.00元', u'barCode': 13, u'str4': u'￥10.00元', u'str3': u'￥150.00元', u'vip': u'', u'payM': 150}
+￥72.00元
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\checkstand_script\test_checkstand4.py", line 86, in test_login8
+    dat18['str2'], dat18['str3'], dat18['str4'])
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 670, in login19
+    self.excpet1(str1)
+  File "D:\Unit_Test\test_common\Checkstand_package2.py", line 406, in excpet1
+    assert result1 == str1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.22' class='hiddenRow'>
+    <td ><div class='testcase'>test_login8_3: 修改热卖商品销售金额挂单取单销售免十元内元加修改实际金额销售</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.22')" >
+        通过</a></span>
+
+    <div id='div_pt4.22' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.22').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.22: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>unittest.suite._ErrorHolder</td>
+    <td>9</td>
+    <td>0</td>
+    <td>0</td>
+    <td>9</td>
+    <td><a href="javascript:showClassDetail('c5',9)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='ft5.1' class='none'>
+    <td ><div class='testcase'>InbulkTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.1')" >
+        错误</a></span>
+
+    <div id='div_ft5.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.1: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk1.py", line 35, in setUpClass
+    cls.a.storage_iframe()
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 60, in storage_iframe
+    self.b.is_iframe("shprk")
+  File "D:\Unit_Test\test_base\base_pack.py", line 178, in is_iframe
+    result = WebDriverWait(self.driver, timeout, 1).until(EC.frame_to_be_available_and_switch_to_it(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.2' class='none'>
+    <td ><div class='testcase'>InbulkTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.2')" >
+        错误</a></span>
+
+    <div id='div_ft5.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.2: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk2.py", line 26, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 20, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.3' class='none'>
+    <td ><div class='testcase'>InbulkTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.3')" >
+        错误</a></span>
+
+    <div id='div_ft5.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.3: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk3.py", line 26, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 20, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.4' class='none'>
+    <td ><div class='testcase'>InbulkTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.4')" >
+        错误</a></span>
+
+    <div id='div_ft5.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.4: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk4.py", line 28, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 20, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.5' class='none'>
+    <td ><div class='testcase'>InbulkTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.5')" >
+        错误</a></span>
+
+    <div id='div_ft5.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.5: {u'unPackedSaleCount': 1, u'str2': u'￥4.55元', u'str1': u'￥14.55元', u'barCode': 17, u'str4': u'￥5.00元', u'str3': u'￥5.00元', u'vip': 456789, u'payM': 5}
+￥14.55元
+￥4.55元
+￥5.00元
+￥5.00元
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk5.py", line 28, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 20, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.6' class='none'>
+    <td ><div class='testcase'>LoginTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.6')" >
+        错误</a></span>
+
+    <div id='div_ft5.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.6: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\storage_script\test_storage2.py", line 27, in setUpClass
+    cls.a.input_shpglframe()
+  File "D:\Unit_Test\test_common\Storage_package.py", line 64, in input_shpglframe
+    self.driver.switch_to.frame("shprk")
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\switch_to.py", line 68, in frame
+    self._driver.execute(Command.SWITCH_TO_FRAME, {'id': frame_reference})
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+NoSuchFrameException: Message: no such frame
+  (Session info: content shell=)
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.7' class='none'>
+    <td ><div class='testcase'>LoginTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.7')" >
+        错误</a></span>
+
+    <div id='div_ft5.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.7: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\storage_script\test_storage3.py", line 27, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_package.py", line 21, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.8' class='none'>
+    <td ><div class='testcase'>LoginTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.8')" >
+        错误</a></span>
+
+    <div id='div_ft5.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.8: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\storage_script\test_storage4.py", line 27, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_package.py", line 21, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft5.9' class='none'>
+    <td ><div class='testcase'>LoginTest)</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft5.9')" >
+        错误</a></span>
+
+    <div id='div_ft5.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft5.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft5.9: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\storage_script\test_storage5.py", line 21, in setUpClass
+    cls.a.open_uzg()
+  File "D:\Unit_Test\test_common\Storage_package.py", line 21, in open_uzg
+    self.driver = webdriver.Chrome(chrome_options=options)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 69, in __init__
+    desired_capabilities=desired_capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 90, in __init__
+    self.start_session(desired_capabilities, browser_profile)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 177, in start_session
+    response = self.execute(Command.NEW_SESSION, capabilities)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Chrome failed to start: exited normally
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>login_script.test_login1.LoginTest: 机构号密码登录测试</td>
+    <td>17</td>
+    <td>11</td>
+    <td>1</td>
+    <td>5</td>
+    <td><a href="javascript:showClassDetail('c6',17)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt6.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_1: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.1')" >
+        通过</a></span>
+
+    <div id='div_pt6.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.1: {u'username': u'', u'password': u'', u'result': u'用户名不能为空'}
+用户名不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.2' class='none'>
+    <td ><div class='testcase'>test_login01_2: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.2')" >
+        失败</a></span>
+
+    <div id='div_ft6.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.2: {u'username': u'', u'password': u'1', u'result': u'用户名不aa能为空'}
+用户名不能为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 43, in test_login01
+    self.a.login1(dat1['username'], dat1['password'], dat1[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 129, in login1
+    self.contrast_result1(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 92, in contrast_result1
+    assert usernameTip == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_3: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.3')" >
+        通过</a></span>
+
+    <div id='div_pt6.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.3: {u'username': u'3', u'password': u'11111111111111111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_4: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.4')" >
+        通过</a></span>
+
+    <div id='div_pt6.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.4: {u'username': u'haha/.?', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_5: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.5')" >
+        通过</a></span>
+
+    <div id='div_pt6.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.5: {u'username': u'9999999902', u'password': u'999902', u'result': u'掌柜账号已冻结'}
+掌柜账号已冻结
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.6' class='none'>
+    <td ><div class='testcase'>test_login01_6: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.6')" >
+        错误</a></span>
+
+    <div id='div_ft6.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.6: {u'username': u'123qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 43, in test_login01
+    self.a.login1(dat1['username'], dat1['password'], dat1[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 129, in login1
+    self.contrast_result1(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 90, in contrast_result1
+    usernameTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_7: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.7')" >
+        通过</a></span>
+
+    <div id='div_pt6.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.7: {u'username': u'1234qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_8: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.8')" >
+        通过</a></span>
+
+    <div id='div_pt6.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.8: {u'username': u'12345qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_9: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.9')" >
+        通过</a></span>
+
+    <div id='div_pt6.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.9: {u'username': u'1234qwer', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_1: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.10')" >
+        通过</a></span>
+
+    <div id='div_pt6.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.10: {u'username': u'haha/..', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_2: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.11')" >
+        通过</a></span>
+
+    <div id='div_pt6.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.11: {u'username': u'11111111111111111111', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_3: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.12')" >
+        通过</a></span>
+
+    <div id='div_pt6.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.12: {u'username': u'1', u'password': u'1', u'result': u'密码不能小于6位字符'}
+密码不能小于6位字符
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.13' class='none'>
+    <td ><div class='testcase'>test_login02_4: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.13')" >
+        错误</a></span>
+
+    <div id='div_ft6.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.13: {u'username': u'9999999986', u'password': u'11111111111111111111', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 49, in test_login02
+    self.a.login2(dat2['username'], dat2['password'], dat2[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 137, in login2
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 97, in contrast_result2
+    passwordTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_5: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.14')" >
+        通过</a></span>
+
+    <div id='div_pt6.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.14: {u'username': u'9999999986', u'password': u'haha/.?', u'result': u'账号密码错误2次，超过6次账号将锁定'}
+账号密码错误2次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.15' class='none'>
+    <td ><div class='testcase'>test_login02_6: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.15')" >
+        错误</a></span>
+
+    <div id='div_ft6.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.15: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误3次，超过6次账号将锁定'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 49, in test_login02
+    self.a.login2(dat2['username'], dat2['password'], dat2[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 137, in login2
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 97, in contrast_result2
+    passwordTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.16' class='none'>
+    <td ><div class='testcase'>test_login02_7: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.16')" >
+        错误</a></span>
+
+    <div id='div_ft6.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.16: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误4次，超过6次账号将锁定'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 49, in test_login02
+    self.a.login2(dat2['username'], dat2['password'], dat2[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 137, in login2
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 97, in contrast_result2
+    passwordTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.17' class='none'>
+    <td ><div class='testcase'>test_login02_8: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.17')" >
+        错误</a></span>
+
+    <div id='div_ft6.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.17: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误5次，超过6次账号将锁定'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 49, in test_login02
+    self.a.login2(dat2['username'], dat2['password'], dat2[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 137, in login2
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 97, in contrast_result2
+    passwordTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>login_script.test_login2.LoginTest: 店员及掌柜登录测试</td>
+    <td>5</td>
+    <td>4</td>
+    <td>0</td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c7',5)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt7.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_1: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.1')" >
+        通过</a></span>
+
+    <div id='div_pt7.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.1: {u'username': u'15939051535', u'password': u'123qwe', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_2: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.2')" >
+        通过</a></span>
+
+    <div id='div_pt7.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.2: {u'username': u'123qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_3: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.3')" >
+        通过</a></span>
+
+    <div id='div_pt7.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.3: {u'username': u'1234qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_4: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.4')" >
+        通过</a></span>
+
+    <div id='div_pt7.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.4: {u'username': u'12345qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft7.5' class='none'>
+    <td ><div class='testcase'>test_login03_5: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft7.5')" >
+        错误</a></span>
+
+    <div id='div_ft7.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft7.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft7.5: {u'username': u'1234qwer', u'password': u'111111', u'result': u'邮掌柜首页'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login2.py", line 30, in test_login03
+    self.a.login3(dat3['username'], dat3['password'], dat3[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 145, in login3
+    self.contrast_result3(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 104, in contrast_result3
+    loginsuccessTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>login_script.test_login3.LoginTest: 短信登录测试</td>
+    <td>17</td>
+    <td>11</td>
+    <td>3</td>
+    <td>3</td>
+    <td><a href="javascript:showClassDetail('c8',17)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt8.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_1: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.1')" >
+        通过</a></span>
+
+    <div id='div_pt8.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.1: {u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u''}
+手机号不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_2: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.2')" >
+        通过</a></span>
+
+    <div id='div_pt8.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.2: {u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u'haha/..?'}
+手机号不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_3: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.3')" >
+        通过</a></span>
+
+    <div id='div_pt8.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.3: {u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'1'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_4: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.4')" >
+        通过</a></span>
+
+    <div id='div_pt8.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.4: {u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.5' class='none'>
+    <td ><div class='testcase'>test_login04_5: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.5')" >
+        错误</a></span>
+
+    <div id='div_ft8.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.5: {u'result': u'掌柜账号不存在', u'validatecode': u'111111', u'mobilenum': u'15939000000'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 42, in test_login04
+    self.a.login4(dat4['mobilenum'], dat4['validatecode'], dat4[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 153, in login4
+    self.contrast_result4(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 111, in contrast_result4
+    mobileNumTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_1: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.6')" >
+        通过</a></span>
+
+    <div id='div_pt8.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.6: {u'result': u'验证码不能为空', u'validatecode': u'', u'mobilenum': u'15939000000'}
+验证码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_2: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.7')" >
+        通过</a></span>
+
+    <div id='div_pt8.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.7: {u'result': u'验证码必须为6位数字', u'validatecode': u'1', u'mobilenum': u'15939000000'}
+验证码必须为6位数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.8' class='none'>
+    <td ><div class='testcase'>test_login05_3: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.8')" >
+        错误</a></span>
+
+    <div id='div_ft8.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.8: {u'result': u'验证码错误1次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 48, in test_login05
+    self.a.login5(dat5['mobilenum'], dat5['validatecode'], dat5[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 161, in login5
+    self.contrast_result5(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 118, in contrast_result5
+    validateCodeTip = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 195, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_pack.py", line 50, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.9' class='none'>
+    <td ><div class='testcase'>test_login05_4: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.9')" >
+        错误</a></span>
+
+    <div id='div_ft8.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.9: Traceback (most recent call last):
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 33, in setUp
+    self.a.text_login()
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 43, in text_login
+    self.b.click(loc)
+  File "D:\Unit_Test\test_base\base_pack.py", line 61, in click
+    element.click()
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webelement.py", line 72, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webelement.py", line 461, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+WebDriverException: Message: unknown error: Element &lt;a class="tab2  cur" data-content="tabContent2" href="javascript: void(0);"&gt;...&lt;/a&gt; is not clickable at point (1110, 307). Other element would receive the click: &lt;div class="loadingBox" style="display: block;"&gt;...&lt;/div&gt;
+  (Session info: content shell=)
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.10' class='none'>
+    <td ><div class='testcase'>test_login05_5: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.10')" >
+        失败</a></span>
+
+    <div id='div_ft8.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.10: {u'result': u'验证码错误3次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误1次，超过6次账号将锁定
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 48, in test_login05
+    self.a.login5(dat5['mobilenum'], dat5['validatecode'], dat5[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 161, in login5
+    self.contrast_result5(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 120, in contrast_result5
+    assert validateCodeTip == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.11' class='none'>
+    <td ><div class='testcase'>test_login05_6: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.11')" >
+        失败</a></span>
+
+    <div id='div_ft8.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.11: {u'result': u'验证码错误4次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误2次，超过6次账号将锁定
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 48, in test_login05
+    self.a.login5(dat5['mobilenum'], dat5['validatecode'], dat5[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 161, in login5
+    self.contrast_result5(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 120, in contrast_result5
+    assert validateCodeTip == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft8.12' class='none'>
+    <td ><div class='testcase'>test_login05_7: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft8.12')" >
+        失败</a></span>
+
+    <div id='div_ft8.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft8.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft8.12: {u'result': u'验证码错误5次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误3次，超过6次账号将锁定
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login3.py", line 48, in test_login05
+    self.a.login5(dat5['mobilenum'], dat5['validatecode'], dat5[u'result'])
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 161, in login5
+    self.contrast_result5(result)
+  File "D:\Unit_Test\test_common\Login_UZG.py", line 120, in contrast_result5
+    assert validateCodeTip == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_1: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.13')" >
+        通过</a></span>
+
+    <div id='div_pt8.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.13: {u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u''}
+未输入手机号码, 无法获取验证码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_2: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.14')" >
+        通过</a></span>
+
+    <div id='div_pt8.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.14: {u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u'haha. /'}
+未输入手机号码, 无法获取验证码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_3: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.15')" >
+        通过</a></span>
+
+    <div id='div_pt8.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.15: {u'result': u'请输入正确的手机号', u'mobilenum': u'1'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_4: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.16')" >
+        通过</a></span>
+
+    <div id='div_pt8.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.16: {u'result': u'请输入正确的手机号', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_5: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.17')" >
+        通过</a></span>
+
+    <div id='div_pt8.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.17: {u'result': u'掌柜账号不存在', u'mobilenum': u'15939000000'}
+掌柜账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>login_script.test_login4.LoginTest: 忘记密码—修改密码测试</td>
+    <td>19</td>
+    <td>19</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c9',19)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt9.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_1: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.1')" >
+        通过</a></span>
+
+    <div id='div_pt9.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.1: {u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_2: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.2')" >
+        通过</a></span>
+
+    <div id='div_pt9.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.2: {u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_3: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.3')" >
+        通过</a></span>
+
+    <div id='div_pt9.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.3: {u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_4: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.4')" >
+        通过</a></span>
+
+    <div id='div_pt9.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.4: {u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_1: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.5')" >
+        通过</a></span>
+
+    <div id='div_pt9.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.5: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u''}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_2: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.6')" >
+        通过</a></span>
+
+    <div id='div_pt9.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.6: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'1'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_3: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.7')" >
+        通过</a></span>
+
+    <div id='div_pt9.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.7: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11111'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_4: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.8')" >
+        通过</a></span>
+
+    <div id='div_pt9.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.8: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11ha. ?'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_1: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.9')" >
+        通过</a></span>
+
+    <div id='div_pt9.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.9: {u'newpassword': u'', u'phonenumber': u'15939000000', u'result': u'密码不能为空', u'messgescode': u'111111'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_2: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.10')" >
+        通过</a></span>
+
+    <div id='div_pt9.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.10: {u'newpassword': u'1', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_3: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.11')" >
+        通过</a></span>
+
+    <div id='div_pt9.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.11: {u'newpassword': u'1111111111111111hah, .?', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_4: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.12')" >
+        通过</a></span>
+
+    <div id='div_pt9.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.12: {u'newpassword': u'111111', u'phonenumber': u'15939000000', u'result': u'密码不能为单一数字的', u'messgescode': u'111111'}
+密码不能为单一数字的
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_5: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.13')" >
+        通过</a></span>
+
+    <div id='div_pt9.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.13: {u'newpassword': u'aaaaaa', u'phonenumber': u'15939000000', u'result': u'密码不能重复字母', u'messgescode': u'111111'}
+密码不能重复字母
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_6: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.14')" >
+        通过</a></span>
+
+    <div id='div_pt9.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.14: {u'newpassword': u'123456', u'phonenumber': u'15939000000', u'result': u'密码不能递增数字', u'messgescode': u'111111'}
+密码不能递增数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_7: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.15')" >
+        通过</a></span>
+
+    <div id='div_pt9.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.15: {u'newpassword': u'654321', u'phonenumber': u'15939000000', u'result': u'密码不能递减数字', u'messgescode': u'111111'}
+密码不能递减数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_1: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.16')" >
+        通过</a></span>
+
+    <div id='div_pt9.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.16: {u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_2: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.17')" >
+        通过</a></span>
+
+    <div id='div_pt9.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.17: {u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_3: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.18')" >
+        通过</a></span>
+
+    <div id='div_pt9.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.18: {u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_4: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.19')" >
+        通过</a></span>
+
+    <div id='div_pt9.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.19: {u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>storage_script.test_storage1.LoginTest</td>
+    <td>17</td>
+    <td>12</td>
+    <td>4</td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c10',17)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='ft10.1' class='none'>
+    <td ><div class='testcase'>test_storage1_1: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft10.1')" >
+        错误</a></span>
+
+    <div id='div_ft10.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft10.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft10.1: {u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 0, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\storage_script\test_storage1.py", line 46, in test_storage1
+    dat1['expirydate'], dat1['standard'], dat1['marks'], dat1[u'num1'],)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 382, in storage
+    self.excpet(result1)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 320, in excpet
+    num1 = driver.find_element_by_xpath('//*[@class="dialogBodyText dialogFlagSuccessSmall"]').text# 获取用户名输入框的提示文本
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 293, in find_element_by_xpath
+    return self.find_element(by=By.XPATH, value=xpath)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 752, in find_element
+    'value': value})['value']
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 236, in execute
+    self.error_handler.check_response(response)
+  File "C:\Python27\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 192, in check_response
+    raise exception_class(message, screen, stacktrace)
+NoSuchElementException: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//*[@class="dialogBodyText dialogFlagSuccessSmall"]"}
+  (Session info: content shell=)
+  (Driver info: chromedriver=2.33.506120 (e3e53437346286c0bc2d2dc9aa4915ba81d9023f),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_10: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.2')" >
+        通过</a></span>
+
+    <div id='div_pt10.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.2: {u'num1': u'请正确填写进货单价', u'purprice': u'gfdg', u'vipprice': 20, u'expirydate': u'', u'purnum': u'', u'itemcode': 451269132, u'saleprice': 22, u'marks': u'', u'standard': u'', u'itemname': u'dfdf'}
+请正确填写进货单价
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft10.3' class='none'>
+    <td ><div class='testcase'>test_storage1_11: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft10.3')" >
+        失败</a></span>
+
+    <div id='div_ft10.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft10.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft10.3: {u'num1': u'请正确填写进货数量', u'purprice': 10, u'vipprice': 20, u'expirydate': u'', u'purnum': u'fdsf', u'itemcode': 451210632, u'saleprice': 22, u'marks': u'', u'standard': u'', u'itemname': u'fdfd'}
+商品名称为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\storage_script\test_storage1.py", line 46, in test_storage1
+    dat1['expirydate'], dat1['standard'], dat1['marks'], dat1[u'num1'],)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 382, in storage
+    self.excpet(result1)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 323, in excpet
+    assert num1 == result1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_12: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.4')" >
+        通过</a></span>
+
+    <div id='div_pt10.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.4: {u'num1': u'入库成功', u'purprice': 60, u'vipprice': 70, u'expirydate': u'', u'purnum': 50, u'itemcode': 1845152, u'saleprice': 80, u'marks': u'', u'standard': u'', u'itemname': u'gggg'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_13: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.5')" >
+        通过</a></span>
+
+    <div id='div_pt10.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.5: {u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 81413, u'saleprice': 60, u'marks': u'', u'standard': u'', u'itemname': u'hhhh'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_14: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.6')" >
+        通过</a></span>
+
+    <div id='div_pt10.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.6: {u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 106484, u'saleprice': 60, u'marks': u'', u'standard': 999, u'itemname': u'hhhh'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_15: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.7')" >
+        通过</a></span>
+
+    <div id='div_pt10.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.7: {u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 5422, u'saleprice': 60, u'marks': 888, u'standard': 999, u'itemname': u'hhhh'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_16: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.8')" >
+        通过</a></span>
+
+    <div id='div_pt10.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.8: {u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 894562, u'saleprice': 60, u'marks': 888, u'standard': 999, u'itemname': u'3ggfg....'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_17: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.9')" >
+        通过</a></span>
+
+    <div id='div_pt10.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.9: {u'num1': u'入库成功', u'purprice': 40, u'vipprice': 50, u'expirydate': 20, u'purnum': 30, u'itemcode': 86121, u'saleprice': 60, u'marks': u'sdfjv895…', u'standard': u'dsjfnjds1254.', u'itemname': u'hhhh'}
+入库成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_2: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.10')" >
+        通过</a></span>
+
+    <div id='div_pt10.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.10: {u'num1': u'商品名称为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 1754168, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品名称为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft10.11' class='none'>
+    <td ><div class='testcase'>test_storage1_3: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft10.11')" >
+        失败</a></span>
+
+    <div id='div_ft10.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft10.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft10.11: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 198453, u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u'gggg'}
+商品名称为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\storage_script\test_storage1.py", line 46, in test_storage1
+    dat1['expirydate'], dat1['standard'], dat1['marks'], dat1[u'num1'],)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 382, in storage
+    self.excpet(result1)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 323, in excpet
+    assert num1 == result1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft10.12' class='none'>
+    <td ><div class='testcase'>test_storage1_4: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft10.12')" >
+        失败</a></span>
+
+    <div id='div_ft10.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft10.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft10.12: {u'num1': u'请正确填写进货单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 189745, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+商品名称为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\storage_script\test_storage1.py", line 46, in test_storage1
+    dat1['expirydate'], dat1['standard'], dat1['marks'], dat1[u'num1'],)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 382, in storage
+    self.excpet(result1)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 323, in excpet
+    assert num1 == result1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_5: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.13')" >
+        通过</a></span>
+
+    <div id='div_pt10.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.13: {u'num1': u'请正确填写进货单价', u'purprice': u'', u'vipprice': 90, u'expirydate': u'', u'purnum': u'', u'itemcode': 145619898, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+请正确填写进货单价
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_6: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.14')" >
+        通过</a></span>
+
+    <div id='div_pt10.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.14: {u'num1': u'请正确填写进货数量', u'purprice': 80, u'vipprice': 90, u'expirydate': u'', u'purnum': u'', u'itemcode': 145619898, u'saleprice': 100, u'marks': u'', u'standard': u'', u'itemname': u'kkk'}
+请正确填写进货数量
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_7: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.15')" >
+        通过</a></span>
+
+    <div id='div_pt10.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.15: {u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': u'sadhas', u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品条码为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt10.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_storage1_8: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt10.16')" >
+        通过</a></span>
+
+    <div id='div_pt10.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt10.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt10.16: {u'num1': u'商品条码为空', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': u'、。，-', u'saleprice': u'', u'marks': u'', u'standard': u'', u'itemname': u''}
+商品条码为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft10.17' class='none'>
+    <td ><div class='testcase'>test_storage1_9: 自定义编码入库</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft10.17')" >
+        失败</a></span>
+
+    <div id='div_ft10.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft10.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft10.17: {u'num1': u'请正确填写销售单价', u'purprice': u'', u'vipprice': u'', u'expirydate': u'', u'purnum': u'', u'itemcode': 822216851, u'saleprice': u'fdfd', u'marks': u'', u'standard': u'', u'itemname': u'jdhfh'}
+商品名称为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\storage_script\test_storage1.py", line 46, in test_storage1
+    dat1['expirydate'], dat1['standard'], dat1['marks'], dat1[u'num1'],)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 382, in storage
+    self.excpet(result1)
+  File "D:\Unit_Test\test_common\Storage_package.py", line 323, in excpet
+    assert num1 == result1
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>131</td>
+    <td>90</td>
+    <td>21</td>
+    <td>20</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<script>
+    drawCircle(90, 21, 20)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

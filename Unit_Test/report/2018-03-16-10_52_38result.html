@@ -1,0 +1,3111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动化测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.3"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+    z-index: 100;
+	position:absolute;
+	left: 23%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:98%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{
+    position:absolute;  ;
+    top:20px;
+    left:300px;
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){
+    var color = ["#6c6","#c60","#c00"];
+    var data = [pass,fail,error];
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");
+    var ctx = canvas.getContext("2d");
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){
+        ctx.fillStyle = color[i];
+        ctx.beginPath();
+        ctx.moveTo(112,84);
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);
+        ctx.fill();
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));
+        ctx.fillStyle = color[i];
+        ctx.fillRect(posX, posY + 20 * i, width, height);
+        ctx.moveTo(posX, posY + 20 * i);
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];
+        ctx.fillText(percent, textX, textY + 20 * i);
+
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>自动化测试报告</h1>
+<p class='attribute'><strong>开始时间:</strong> 2018-03-16 10:52:38</p>
+<p class='attribute'><strong>耗时:</strong> 0:38:01.716000</p>
+<p class='attribute'><strong>状态:</strong> <span class="tj passCase">Pass</span>87 <span class="tj failCase">Failure</span>4 <span class="tj errorCase">Error</span>3</p>
+
+<p class='description'>用例执行情况</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+    <td>错误截图</td>
+</tr>
+
+<tr class='errorClass'>
+    <td>inbulk_script.test_inbulk1.InbulkTest: 新建散货测试</td>
+    <td>10</td>
+    <td>8</td>
+    <td>0</td>
+    <td>2</td>
+    <td><a href="javascript:showClassDetail('c1',10)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk01_1: 新建散货—商品名称输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a></span>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: {u'itemname': u'', u'result': u'散货名称不能为空'}
+散货名称不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk01_2: 新建散货—商品名称输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        通过</a></span>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: {u'itemname': u'// ??', u'result': u'散货名称不能为空'}
+散货名称不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk02_1: 新建散货—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a></span>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: {u'itemname': u'ceshi1234567', u'saleprice': u'', u'result': u'销售价格不能为空'}
+销售价格不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk02_2: 新建散货—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        通过</a></span>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: {u'itemname': u'ceshi1234567', u'saleprice': u'ceshi /?', u'result': u'销售价格不能为空'}
+销售价格不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk02_3: 新建散货—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        通过</a></span>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: {u'itemname': u'ceshi1234567', u'saleprice': u'0', u'result': u'销售价格必须大于0'}
+销售价格必须大于0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk03_1: 新建散货—进货价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a></span>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: {u'purprice': u'', u'purnum': u'11111.111', u'itemname': u'ceshi6789101', u'saleprice': u'11111.11', u'result': u'请填写进货价格'}
+请填写进货价格
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk03_2: 新建散货—进货价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        通过</a></span>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: {u'purprice': u'0', u'purnum': u'', u'itemname': u'ceshi6789101', u'saleprice': u'11111.11', u'result': u'进货价格必须大于0'}
+进货价格必须大于0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk04_1: 新建散货—商品单位测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        通过</a></span>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: {u'itemname': u'ceshi6789101', u'saleprice': u'11111.11', u'result': u'单位不能为空'}
+单位不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.9' class='none'>
+    <td ><div class='testcase'>test_inbulk05_1: 新建散货—新建成功提示测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.9')" >
+        错误</a></span>
+
+    <div id='div_ft1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.9: {u'purprice': u'1.0', u'vipprice': u'0', u'standard': u'ce100', u'purnum': u'10', u'saleprice': u'1.11', u'itemname': u'ceshi110', u'result': u'新建成功'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk1.py", line 80, in test_inbulk05
+    self.a.storage5(dat5['itemname'], dat5['saleprice'], dat5['vipprice'], dat5['purprice'], dat5['purnum'], dat5['standard'], dat5[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 363, in storage5
+    self.contrast_result9(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 299, in contrast_result9
+    loc = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_page.py", line 171, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_page.py", line 26, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft1.10' class='none'>
+    <td ><div class='testcase'>test_inbulk06_1: 新建散货—成功后—在入库记录验证测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.10')" >
+        错误</a></span>
+
+    <div id='div_ft1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.10: {u'result': u'ceshi110'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk1.py", line 86, in test_inbulk06
+    self.a.storage6(dat6[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 369, in storage6
+    self.contrast_result10(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 306, in contrast_result10
+    loc = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_page.py", line 171, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_page.py", line 26, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='errorClass'>
+    <td>inbulk_script.test_inbulk2.InbulkTest: 散货商品上架入库测试</td>
+    <td>5</td>
+    <td>2</td>
+    <td>2</td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c2',5)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk07_1: 上架入库—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        通过</a></span>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: {u'saleprice': u'', u'result': u'销售价格不能为空'}
+销售价格不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft2.2' class='none'>
+    <td ><div class='testcase'>test_inbulk07_2: 上架入库—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.2')" >
+        失败</a></span>
+
+    <div id='div_ft2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.2: {u'saleprice': u'// ??', u'result': u'销售价格不能为空'}
+请填写销售价格
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk2.py", line 50, in test_inbulk07
+    self.a.storage7(dat7['saleprice'], dat7[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 375, in storage7
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 193, in contrast_result2
+    assert loc == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft2.3' class='none'>
+    <td ><div class='testcase'>test_inbulk07_3: 上架入库—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.3')" >
+        失败</a></span>
+
+    <div id='div_ft2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.3: {u'saleprice': u'0', u'result': u'销售价格必须大于0'}
+请填写销售价格
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk2.py", line 50, in test_inbulk07
+    self.a.storage7(dat7['saleprice'], dat7[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 375, in storage7
+    self.contrast_result2(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 193, in contrast_result2
+    assert loc == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft2.4' class='none'>
+    <td ><div class='testcase'>test_inbulk08_1: 上架入库—上架入库成功提示测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.4')" >
+        错误</a></span>
+
+    <div id='div_ft2.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.4: {u'purprice': u'8.88', u'purnum': u'10.111', u'vipprice': u'0', u'saleprice': u'10.11', u'result': u'上架入库成功'}
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk2.py", line 56, in test_inbulk08
+    self.a.storage8(dat8['saleprice'], dat8['vipprice'], dat8['purprice'], dat8['purnum'], dat8[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 387, in storage8
+    self.contrast_result9(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 299, in contrast_result9
+    loc = self.b.get_text(loc)
+  File "D:\Unit_Test\test_base\base_page.py", line 171, in get_text
+    t = self.find_element(locator)
+  File "D:\Unit_Test\test_base\base_page.py", line 26, in find_element
+    element = WebDriverWait(self.driver, timeout, 1).until(EC.presence_of_element_located(locator))
+  File "C:\Python27\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt2.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk09_1: 上架入库—成功后—在入库记录验证测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.5')" >
+        通过</a></span>
+
+    <div id='div_pt2.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.5: {u'result': u'混称饼干'}
+混称饼干
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='failClass'>
+    <td>inbulk_script.test_inbulk3.InbulkTest: 编辑散货测试</td>
+    <td>4</td>
+    <td>3</td>
+    <td>1</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c3',4)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt3.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk10_1: 编辑散货—商品名称输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.1')" >
+        通过</a></span>
+
+    <div id='div_pt3.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.1: {u'itemname': u'', u'result': u'散货名称不能为空'}
+散货名称不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk10_2: 编辑散货—商品名称输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.2')" >
+        通过</a></span>
+
+    <div id='div_pt3.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.2: {u'itemname': u'// ??', u'result': u'散货名称不能为空'}
+散货名称不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt3.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk11_1: 编辑散货—销售价格输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.3')" >
+        通过</a></span>
+
+    <div id='div_pt3.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.3: {u'itemname': u'ceshi6789101', u'saleprice': u'0', u'result': u'销售价格必须大于0'}
+销售价格必须大于0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft3.4' class='none'>
+    <td ><div class='testcase'>test_inbulk12_1: 编辑散货—编辑成功测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.4')" >
+        失败</a></span>
+
+    <div id='div_ft3.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.4: {u'result': u'修改成功', u'vipprice': u'0', u'itemname': u'ceshi103', u'saleprice': u'11111.11', u'standard': u'ce104'}
+
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\inbulk_script\test_inbulk3.py", line 62, in test_inbulk12
+    self.a.storage12(dat12['itemname'], dat12['saleprice'], dat12['vipprice'], dat12['standard'], dat12[u'result'])
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 420, in storage12
+    self.contrast_result9(result)
+  File "D:\Unit_Test\test_common\Storage_inbulk.py", line 301, in contrast_result9
+    assert loc == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>inbulk_script.test_inbulk4.InbulkTest: 已上架散货入库测试</td>
+    <td>8</td>
+    <td>8</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c4',8)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt4.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk13_1: 散货商品入库—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.1')" >
+        通过</a></span>
+
+    <div id='div_pt4.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.1: {u'purnum1': u'11111.111', u'result': u'进货单价不能为0', u'saleprice1': u''}
+进货单价不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk13_2: 散货商品入库—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.2')" >
+        通过</a></span>
+
+    <div id='div_pt4.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.2: {u'purnum1': u'11111.111', u'result': u'进货单价不能为0', u'saleprice1': u'0'}
+进货单价不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk13_3: 散货商品入库—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.3')" >
+        通过</a></span>
+
+    <div id='div_pt4.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.3: {u'purnum1': u'11111.111', u'result': u'进货单价不能为0', u'saleprice1': u'ha /?'}
+进货单价不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk14_1: 散货商品入库—进货数量输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.4')" >
+        通过</a></span>
+
+    <div id='div_pt4.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.4: {u'purnum1': u'', u'result': u'进货数量不能为0', u'saleprice1': u'11111.11'}
+进货数量不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk14_2: 散货商品入库—进货数量输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.5')" >
+        通过</a></span>
+
+    <div id='div_pt4.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.5: {u'purnum1': u'0', u'result': u'进货数量不能为0', u'saleprice1': u'11111.11'}
+进货数量不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk14_3: 散货商品入库—进货数量输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.6')" >
+        通过</a></span>
+
+    <div id='div_pt4.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.6: {u'purnum1': u'ha /?', u'result': u'进货数量不能为0', u'saleprice1': u'11111.11'}
+进货数量不能为0
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk15_1: 散货商品入库—入库成功提示测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.7')" >
+        通过</a></span>
+
+    <div id='div_pt4.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.7: {u'purnum1': u'11.111', u'result': u'入库成功!', u'saleprice1': u'11.11'}
+入库成功!
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt4.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk16_1: 散货商品入库—入库成功后—在入库记录验证测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.8')" >
+        通过</a></span>
+
+    <div id='div_pt4.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.8: {u'result': u'\xa511.11'}
+¥11.11
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>inbulk_script.test_inbulk5.InbulkTest: 入库记录编辑测试</td>
+    <td>8</td>
+    <td>8</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c5',8)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt5.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk17_1: 入库记录编辑—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.1')" >
+        通过</a></span>
+
+    <div id='div_pt5.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.1: {u'purnum2': u'11111.111', u'saleprice2': u'', u'result': u'进货价格不能为空！'}
+进货价格不能为空！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk17_2: 入库记录编辑—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.2')" >
+        通过</a></span>
+
+    <div id='div_pt5.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.2: {u'purnum2': u'11111.111', u'saleprice2': u'ha /?', u'result': u'进货价格不能为空！'}
+进货价格不能为空！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk17_3: 入库记录编辑—进货单价输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.3')" >
+        通过</a></span>
+
+    <div id='div_pt5.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.3: {u'purnum2': u'11111.111', u'saleprice2': u'0', u'result': u'进货价格需大于0！'}
+进货价格需大于0！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk18_1: 入库记录编辑—进货总数输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.4')" >
+        通过</a></span>
+
+    <div id='div_pt5.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.4: {u'purnum2': u'', u'saleprice2': u'11111.11', u'result': u'进货总数不能为空！'}
+进货总数不能为空！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk18_2: 入库记录编辑—进货总数输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.5')" >
+        通过</a></span>
+
+    <div id='div_pt5.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.5: {u'purnum2': u'ha /?', u'saleprice2': u'11111.11', u'result': u'进货总数不能为空！'}
+进货总数不能为空！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk18_3: 入库记录编辑—进货总数输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.6')" >
+        通过</a></span>
+
+    <div id='div_pt5.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.6: {u'purnum2': u'0', u'saleprice2': u'11111.11', u'result': u'进货总数需大于0！'}
+进货总数需大于0！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk19_1: 入库记录—编辑成功提示测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.7')" >
+        通过</a></span>
+
+    <div id='div_pt5.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.7: {u'purnum2': u'11.222', u'saleprice2': u'11.22', u'result': u'修改成功！'}
+修改成功！
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt5.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_inbulk20_1: 入库记录—编辑成功后—在入库记录中验证测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt5.8')" >
+        通过</a></span>
+
+    <div id='div_pt5.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt5.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt5.8: ¥11.22
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='failClass'>
+    <td>login_script.test_login1.LoginTest: 机构号密码登录测试</td>
+    <td>18</td>
+    <td>17</td>
+    <td>1</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c6',18)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt6.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_1: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.1')" >
+        通过</a></span>
+
+    <div id='div_pt6.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.1: {u'username': u'', u'password': u'', u'result': u'用户名不能为空'}
+用户名不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='ft6.2' class='none'>
+    <td ><div class='testcase'>test_login01_2: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status failCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft6.2')" >
+        失败</a></span>
+
+    <div id='div_ft6.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft6.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft6.2: {u'username': u'', u'password': u'1', u'result': u'用户名不aa能为空'}
+用户名不能为空
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\ddt.py", line 139, in wrapper
+    return func(self, *args, **kwargs)
+  File "D:\Unit_Test\test_case\login_script\test_login1.py", line 41, in test_login01
+    self.a.login1(dat1['username'], dat1['password'], dat1[u'result'])
+  File "D:\Unit_Test\test_common\login_UZG.py", line 128, in login1
+    self.contrast_result1(result)
+  File "D:\Unit_Test\test_common\login_UZG.py", line 91, in contrast_result1
+    assert usernameTip == result
+AssertionError
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_3: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.3')" >
+        通过</a></span>
+
+    <div id='div_pt6.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.3: {u'username': u'3', u'password': u'11111111111111111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_4: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.4')" >
+        通过</a></span>
+
+    <div id='div_pt6.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.4: {u'username': u'9999999902', u'password': u'999902', u'result': u'掌柜账号已冻结'}
+掌柜账号已冻结
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_5: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.5')" >
+        通过</a></span>
+
+    <div id='div_pt6.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.5: {u'username': u'haha/.?', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_6: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.6')" >
+        通过</a></span>
+
+    <div id='div_pt6.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.6: {u'username': u'123qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_7: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.7')" >
+        通过</a></span>
+
+    <div id='div_pt6.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.7: {u'username': u'1234qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_8: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.8')" >
+        通过</a></span>
+
+    <div id='div_pt6.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.8: {u'username': u'12345qwe', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login01_9: 机构号输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.9')" >
+        通过</a></span>
+
+    <div id='div_pt6.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.9: {u'username': u'1234qwer', u'password': u'111111', u'result': u'掌柜登录账号不存在'}
+掌柜登录账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_1: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.10')" >
+        通过</a></span>
+
+    <div id='div_pt6.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.10: {u'username': u'haha/..', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_2: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.11')" >
+        通过</a></span>
+
+    <div id='div_pt6.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.11: {u'username': u'11111111111111111111', u'password': u'', u'result': u'密码不能为空'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_3: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.12')" >
+        通过</a></span>
+
+    <div id='div_pt6.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.12: {u'username': u'1', u'password': u'1', u'result': u'密码不能小于6位字符'}
+密码不能小于6位字符
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_4: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.13')" >
+        通过</a></span>
+
+    <div id='div_pt6.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.13: {u'username': u'9999999985', u'password': u'haha/.?', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+账号密码错误1次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_5: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.14')" >
+        通过</a></span>
+
+    <div id='div_pt6.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.14: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误1次，超过6次账号将锁定'}
+账号密码错误1次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_6: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.15')" >
+        通过</a></span>
+
+    <div id='div_pt6.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.15: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误2次，超过6次账号将锁定'}
+账号密码错误2次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_7: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.16')" >
+        通过</a></span>
+
+    <div id='div_pt6.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.16: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误3次，超过6次账号将锁定'}
+账号密码错误3次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_8: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.17')" >
+        通过</a></span>
+
+    <div id='div_pt6.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.17: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误4次，超过6次账号将锁定'}
+账号密码错误4次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt6.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_login02_9: 密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt6.18')" >
+        通过</a></span>
+
+    <div id='div_pt6.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt6.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt6.18: {u'username': u'9999999986', u'password': u'111111', u'result': u'账号密码错误5次，超过6次账号将锁定'}
+账号密码错误5次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>login_script.test_login2.LoginTest: 店员及掌柜登录测试</td>
+    <td>5</td>
+    <td>5</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c7',5)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt7.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_1: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.1')" >
+        通过</a></span>
+
+    <div id='div_pt7.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.1: {u'username': u'15939051535', u'password': u'123qwe', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_2: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.2')" >
+        通过</a></span>
+
+    <div id='div_pt7.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.2: {u'username': u'123qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_3: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.3')" >
+        通过</a></span>
+
+    <div id='div_pt7.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.3: {u'username': u'1234qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_4: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.4')" >
+        通过</a></span>
+
+    <div id='div_pt7.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.4: {u'username': u'12345qwe', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt7.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login03_5: 店员、店长及掌柜登录测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt7.5')" >
+        通过</a></span>
+
+    <div id='div_pt7.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt7.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt7.5: {u'username': u'1234qwer', u'password': u'111111', u'result': u'邮掌柜首页'}
+邮掌柜首页
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>login_script.test_login3.LoginTest: 短信登录测试</td>
+    <td>17</td>
+    <td>17</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c8',17)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt8.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_1: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.1')" >
+        通过</a></span>
+
+    <div id='div_pt8.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.1: {u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u''}
+手机号不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_2: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.2')" >
+        通过</a></span>
+
+    <div id='div_pt8.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.2: {u'result': u'手机号不能为空', u'validatecode': u'', u'mobilenum': u'haha/..?'}
+手机号不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_3: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.3')" >
+        通过</a></span>
+
+    <div id='div_pt8.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.3: {u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'1'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_4: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.4')" >
+        通过</a></span>
+
+    <div id='div_pt8.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.4: {u'result': u'请输入正确的手机号', u'validatecode': u'', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login04_5: 短信登陆—手机号码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.5')" >
+        通过</a></span>
+
+    <div id='div_pt8.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.5: {u'result': u'掌柜账号不存在', u'validatecode': u'111111', u'mobilenum': u'15939000000'}
+掌柜账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_1: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.6')" >
+        通过</a></span>
+
+    <div id='div_pt8.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.6: {u'result': u'验证码不能为空', u'validatecode': u'', u'mobilenum': u'15939000000'}
+验证码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_2: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.7')" >
+        通过</a></span>
+
+    <div id='div_pt8.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.7: {u'result': u'验证码必须为6位数字', u'validatecode': u'1', u'mobilenum': u'15939000000'}
+验证码必须为6位数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_3: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.8')" >
+        通过</a></span>
+
+    <div id='div_pt8.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.8: {u'result': u'验证码错误1次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误1次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_4: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.9')" >
+        通过</a></span>
+
+    <div id='div_pt8.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.9: {u'result': u'验证码错误2次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误2次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_5: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.10')" >
+        通过</a></span>
+
+    <div id='div_pt8.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.10: {u'result': u'验证码错误3次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误3次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_6: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.11')" >
+        通过</a></span>
+
+    <div id='div_pt8.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.11: {u'result': u'验证码错误4次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误4次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login05_7: 短信登陆—验证码输入测试—点击登录按钮提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.12')" >
+        通过</a></span>
+
+    <div id='div_pt8.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.12: {u'result': u'验证码错误5次，超过6次账号将锁定', u'validatecode': u'111111', u'mobilenum': u'15939051535'}
+验证码错误5次，超过6次账号将锁定
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_1: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.13')" >
+        通过</a></span>
+
+    <div id='div_pt8.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.13: {u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u''}
+未输入手机号码, 无法获取验证码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_2: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.14')" >
+        通过</a></span>
+
+    <div id='div_pt8.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.14: {u'result': u'未输入手机号码, 无法获取验证码', u'mobilenum': u'haha. /'}
+未输入手机号码, 无法获取验证码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_3: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.15')" >
+        通过</a></span>
+
+    <div id='div_pt8.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.15: {u'result': u'请输入正确的手机号', u'mobilenum': u'1'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_4: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.16')" >
+        通过</a></span>
+
+    <div id='div_pt8.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.16: {u'result': u'请输入正确的手机号', u'mobilenum': u'11111111111'}
+请输入正确的手机号
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt8.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login06_5: 短信登录—手机号码输入测试—点击获取验证码提示</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt8.17')" >
+        通过</a></span>
+
+    <div id='div_pt8.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt8.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt8.17: {u'result': u'掌柜账号不存在', u'mobilenum': u'15939000000'}
+掌柜账号不存在
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr class='passClass'>
+    <td>login_script.test_login4.LoginTest: 忘记密码—修改密码测试</td>
+    <td>19</td>
+    <td>19</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c9',19)">详情</a></td>
+    <td>&nbsp;</td>
+</tr>
+
+<tr id='pt9.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_1: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.1')" >
+        通过</a></span>
+
+    <div id='div_pt9.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.1: {u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_2: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.2')" >
+        通过</a></span>
+
+    <div id='div_pt9.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.2: {u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_3: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.3')" >
+        通过</a></span>
+
+    <div id='div_pt9.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.3: {u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_login07_4: 修改密码—手机号码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.4')" >
+        通过</a></span>
+
+    <div id='div_pt9.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.4: {u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_1: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.5')" >
+        通过</a></span>
+
+    <div id='div_pt9.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.5: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u''}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_2: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.6')" >
+        通过</a></span>
+
+    <div id='div_pt9.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.6: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'1'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_3: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.7')" >
+        通过</a></span>
+
+    <div id='div_pt9.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.7: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11111'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_login08_4: 修改密码—验证码输入框测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.8')" >
+        通过</a></span>
+
+    <div id='div_pt9.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.8: {u'phonenumber': u'15939000000', u'result': u'验证码输入有误', u'messgescode': u'11ha. ?'}
+验证码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_1: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.9')" >
+        通过</a></span>
+
+    <div id='div_pt9.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.9: {u'newpassword': u'', u'phonenumber': u'15939000000', u'result': u'密码不能为空', u'messgescode': u'111111'}
+密码不能为空
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_2: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.10')" >
+        通过</a></span>
+
+    <div id='div_pt9.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.10: {u'newpassword': u'1', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_3: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.11')" >
+        通过</a></span>
+
+    <div id='div_pt9.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.11: {u'newpassword': u'1111111111111111hah, .?', u'phonenumber': u'15939000000', u'result': u'密码为6-20位密码', u'messgescode': u'111111'}
+密码为6-20位密码
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_4: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.12')" >
+        通过</a></span>
+
+    <div id='div_pt9.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.12: {u'newpassword': u'111111', u'phonenumber': u'15939000000', u'result': u'密码不能为单一数字的', u'messgescode': u'111111'}
+密码不能为单一数字的
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_5: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.13')" >
+        通过</a></span>
+
+    <div id='div_pt9.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.13: {u'newpassword': u'aaaaaa', u'phonenumber': u'15939000000', u'result': u'密码不能重复字母', u'messgescode': u'111111'}
+密码不能重复字母
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_6: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.14')" >
+        通过</a></span>
+
+    <div id='div_pt9.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.14: {u'newpassword': u'123456', u'phonenumber': u'15939000000', u'result': u'密码不能递增数字', u'messgescode': u'111111'}
+密码不能递增数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_login09_7: 修改密码—设置新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.15')" >
+        通过</a></span>
+
+    <div id='div_pt9.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.15: {u'newpassword': u'654321', u'phonenumber': u'15939000000', u'result': u'密码不能递减数字', u'messgescode': u'111111'}
+密码不能递减数字
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_1: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.16')" >
+        通过</a></span>
+
+    <div id='div_pt9.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.16: {u'phonenumber': u'', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_2: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.17')" >
+        通过</a></span>
+
+    <div id='div_pt9.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.17: {u'phonenumber': u'1', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_3: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.18')" >
+        通过</a></span>
+
+    <div id='div_pt9.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.18: {u'phonenumber': u'1111111haha ./?', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='pt9.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_login10_4: 修改密码—再次输入新密码输入测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt9.19')" >
+        通过</a></span>
+
+    <div id='div_pt9.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt9.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt9.19: {u'phonenumber': u'11111111111', u'result': u'手机号码输入有误'}
+手机号码输入有误
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+    <td></td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>94</td>
+    <td>87</td>
+    <td>4</td>
+    <td>3</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<script>
+    drawCircle(87, 4, 3)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>
