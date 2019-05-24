@@ -15,7 +15,9 @@ def index():
 if __name__ == '__main__':
     app.run()
     # app.run(host='0.0.0.0', port=8080, debug=True)
-
+    
+    
+#第二分支合并主线了
 # @app.route('/')
 # def index():
 #     return redirect(url_for('login'))
